@@ -1,0 +1,22 @@
+{
+    "status_code": 200,
+    "data": {
+        "Tags": [
+            {
+                "Key": "Creator",
+                "Value": "Admin"
+            }
+        ],
+        "ResponseMetadata": {
+            "RequestId": "cb52e787-ef28-4261-9550-b0c66ae6e9ab",
+            "HTTPStatusCode": 200,
+            "HTTPHeaders": {
+                "x-amzn-requestid": "cb52e787-ef28-4261-9550-b0c66ae6e9ab",
+                "content-type": "application/x-amz-json-1.1",
+                "content-length": "48",
+                "date": "Fri, 27 Dec 2019 15:33:45 GMT"
+            },
+            "RetryAttempts": 0
+        }
+    }
+}

@@ -1,0 +1,39 @@
+{
+  "eventVersion": "1.05",
+  "userIdentity": {
+    "type": "IAMUser",
+    "principalId": "AAAAAAAAAAAAAAAAAAAAA",
+    "arn": "arn:aws:iam::123456789012:user/AutoTester",
+    "accountId": "123456789012",
+    "accessKeyId": "BBBBBBBBBBBBBBBBBBBB",
+    "userName": "AutoTester",
+    "sessionContext": {
+      "attributes": {
+        "mfaAuthenticated": "true",
+        "creationDate": "2019-12-09T14:10:12Z"
+      }
+    },
+    "invokedBy": "signin.amazonaws.com"
+  },
+  "eventTime": "2019-12-09T15:44:47Z",
+  "eventSource": "s3.amazonaws.com",
+  "eventName": "CreateBucket",
+  "awsRegion": "us-east-1",
+  "sourceIPAddress": "206.196.17.36",
+  "userAgent": "signin.amazonaws.com",
+  "requestParameters": {
+    "host": ["s3.amazonaws.com"],
+    "bucketName": "test-and-del-me-later"
+  },
+  "responseElements": "",
+  "additionalEventData": {
+    "SignatureVersion": "SigV4",
+    "CipherSuite": "ECDHE-RSA-AES128-SHA",
+    "AuthenticationMethod": "AuthHeader",
+    "vpcEndpointId": "vpce-foodd00d"
+  },
+  "requestID": "F97E48ADB8BE7B7F",
+  "eventID": "b9b27832-6431-48a4-a8eb-be79fff4a29b",
+  "eventType": "AwsApiCall",
+  "vpcEndpointId": "vpce-foodd00d"
+}

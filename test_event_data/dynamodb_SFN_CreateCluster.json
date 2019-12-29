@@ -1,0 +1,8 @@
+{
+  "EventName": "CreateCluster",
+  "Creator": "Admin",
+  "ResourceArn": "arn:aws:dax:us-east-1:292909299215:cache/autotag-dax-4",
+  "TagStatus": "pending",
+  "MaxAttempts": 20,
+  "Attempts": 20
+}

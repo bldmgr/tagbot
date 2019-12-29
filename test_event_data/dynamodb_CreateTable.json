@@ -1,0 +1,89 @@
+{
+  "eventVersion": "1.06",
+  "userIdentity": {
+    "type": "IAMUser",
+    "principalId": "AIDATVPVOWKXUVYKXTXW5",
+    "arn": "arn:aws:iam::292909299215:user/Admin",
+    "accountId": "292909299215",
+    "accessKeyId": "ASIATVPVOWKXZ72ZWJFI",
+    "userName": "Admin",
+    "sessionContext": {
+      "attributes": {
+        "creationDate": "2019-12-24T12:21:27Z",
+        "mfaAuthenticated": "true"
+      }
+    },
+    "invokedBy": "signin.amazonaws.com"
+  },
+  "eventTime": "2019-12-24T20:42:34Z",
+  "eventSource": "dynamodb.amazonaws.com",
+  "eventName": "CreateTable",
+  "awsRegion": "us-east-1",
+  "sourceIPAddress": "206.196.17.36",
+  "userAgent": "signin.amazonaws.com",
+  "requestParameters": {
+    "attributeDefinitions": [
+      {
+        "attributeName": "id",
+        "attributeType": "S"
+      }
+    ],
+    "tableName": "autotag-test-4",
+    "keySchema": [
+      {
+        "attributeName": "id",
+        "keyType": "HASH"
+      }
+    ],
+    "billingMode": "PROVISIONED",
+    "provisionedThroughput": {
+      "readCapacityUnits": 5.0,
+      "writeCapacityUnits": 5.0
+    },
+    "sSESpecification": {
+      "enabled": "False"
+    }
+  },
+  "responseElements": {
+    "tableDescription": {
+      "attributeDefinitions": [
+        {
+          "attributeName": "id",
+          "attributeType": "S"
+        }
+      ],
+      "tableName": "autotag-test-4",
+      "keySchema": [
+        {
+          "attributeName": "id",
+          "keyType": "HASH"
+        }
+      ],
+      "tableStatus": "CREATING",
+      "creationDateTime": "Dec 24, 2019, 8:42:34 PM",
+      "provisionedThroughput": {
+        "numberOfDecreasesToday": 0.0,
+        "readCapacityUnits": 5.0,
+        "writeCapacityUnits": 5.0
+      },
+      "tableSizeBytes": 0.0,
+      "itemCount": 0.0,
+      "tableArn": "arn:aws:dynamodb:us-east-1:292909299215:table/autotag-test-4",
+      "tableId": "ae9fe294-7d68-4a5e-88d1-e9b3ff84f531"
+    }
+  },
+  "requestID": "521N5G7EJSIOIVJ22A94VLP967VV4KQNSO5AEMVJF66Q9ASUAAJG",
+  "eventID": "301e9dc7-69e5-49f0-a9b1-ebc3d7800000",
+  "readOnly": "False",
+  "resources": [
+    {
+      "accountId": "292909299215",
+      "type": "AWS::DynamoDB::Table",
+      "ARN": "arn:aws:dynamodb:us-east-1:292909299215:table/autotag-test-4"
+    }
+  ],
+  "eventType": "AwsApiCall",
+  "apiVersion": "2012-08-10",
+  "managementEvent": "True",
+  "recipientAccountId": "292909299215"
+}

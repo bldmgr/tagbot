@@ -1,0 +1,57 @@
+{
+    "eventVersion": "1.04",
+    "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAIBDRAD2OR4Z65F366",
+        "arn": "arn:aws:iam::292909299215:user/Admin",
+        "accountId": "292909299215",
+        "accessKeyId": "ASIAIUAWV665QR55V32Q",
+        "userName": "Admin",
+        "sessionContext": {
+            "attributes": {
+                "mfaAuthenticated": "false",
+                "creationDate": "2018-03-09T12:46:20Z"
+            }
+        },
+        "invokedBy": "signin.amazonaws.com"
+    },
+    "eventTime": "2018-03-09T20:34:43Z",
+    "eventSource": "rds.amazonaws.com",
+    "eventName": "CreateDBClusterSnapshot",
+    "awsRegion": "us-east-1",
+    "sourceIPAddress": "174.112.214.166",
+    "userAgent": "signin.amazonaws.com",
+    "requestParameters": {
+        "dBClusterSnapshotIdentifier": "demoSnapshot",
+        "dBClusterIdentifier": "democluster"
+    },
+    "responseElements": {
+        "clusterCreateTime": "Mar 9, 2018 8:23:43 PM",
+        "snapshotType": "manual",
+        "snapshotCreateTime": "Mar 9, 2018 8:34:43 PM",
+        "dBClusterSnapshotIdentifier": "demosnapshot",
+        "percentProgress": 0,
+        "engine": "aurora",
+        "licenseModel": "aurora",
+        "iAMDatabaseAuthenticationEnabled": false,
+        "vpcId": "vpc-6050a51b",
+        "storageEncrypted": true,
+        "dBClusterIdentifier": "democluster",
+        "masterUsername": "admin",
+        "engineVersion": "5.6.10a",
+        "status": "creating",
+        "kmsKeyId": "arn:aws:kms:us-east-1:292909299215:key/1ffe138d-ade3-450c-9811-8d82f124ee11",
+        "availabilityZones": [
+            "us-east-1c",
+            "us-east-1d",
+            "us-east-1e"
+        ],
+        "allocatedStorage": 1,
+        "port": 0,
+        "dBClusterSnapshotArn": "arn:aws:rds:us-east-1:292909299215:cluster-snapshot:demosnapshot"
+    },
+    "requestID": "3719d737-2619-486e-835e-e2de1f6bada9",
+    "eventID": "c3a24408-cde1-44de-ab28-e5c7b5c77629",
+    "eventType": "AwsApiCall",
+    "recipientAccountId": "292909299215"
+}

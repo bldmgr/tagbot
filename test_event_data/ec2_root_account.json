@@ -1,0 +1,160 @@
+{
+    "eventVersion": "1.05",
+    "userIdentity": {
+        "type": "Root",
+        "principalId": "292909299215",
+        "arn": "arn:aws:iam::292909299215:root",
+        "accountId": "292909299215",
+        "accessKeyId": "ASIAJTM3FHYKBVK7M5KQ",
+        "sessionContext": {
+            "attributes": {
+                "mfaAuthenticated": "true",
+                "creationDate": "2018-03-05T14:33:54Z"
+            }
+        },
+        "invokedBy": "signin.amazonaws.com"
+    },
+    "eventTime": "2018-03-05T19:01:42Z",
+    "eventSource": "ec2.amazonaws.com",
+    "eventName": "RunInstances",
+    "awsRegion": "us-east-1",
+    "sourceIPAddress": "172.110.70.106",
+    "userAgent": "signin.amazonaws.com",
+    "requestParameters": {
+        "instancesSet": {
+            "items": [
+                {
+                    "imageId": "ami-26ebbc5c",
+                    "minCount": 1,
+                    "maxCount": 1
+                }
+            ]
+        },
+        "groupSet": {
+            "items": [
+                {
+                    "groupId": "sg-9112c1e7"
+                }
+            ]
+        },
+        "instanceType": "t2.micro",
+        "blockDeviceMapping": {
+            "items": [
+                {
+                    "deviceName": "/dev/sda1",
+                    "ebs": {
+                        "volumeSize": 10,
+                        "deleteOnTermination": true,
+                        "volumeType": "gp2"
+                    }
+                }
+            ]
+        },
+        "monitoring": {
+            "enabled": false
+        },
+        "disableApiTermination": false,
+        "ebsOptimized": false,
+        "creditSpecification": {
+            "cpuCredits": "standard"
+        }
+    },
+    "responseElements": {
+        "requestId": "43f0d878-0d33-4620-b290-bef81c291e56",
+        "reservationId": "r-0b38c94a7927e1cff",
+        "ownerId": "292909299215",
+        "groupSet": {},
+        "instancesSet": {
+            "items": [
+                {
+                    "instanceId": "i-0f729d971c0b839dc",
+                    "imageId": "ami-26ebbc5c",
+                    "instanceState": {
+                        "code": 0,
+                        "name": "pending"
+                    },
+                    "privateDnsName": "ip-172-31-80-155.ec2.internal",
+                    "amiLaunchIndex": 0,
+                    "productCodes": {},
+                    "instanceType": "t2.micro",
+                    "launchTime": 1520276502000,
+                    "placement": {
+                        "availabilityZone": "us-east-1c",
+                        "tenancy": "default"
+                    },
+                    "monitoring": {
+                        "state": "disabled"
+                    },
+                    "subnetId": "subnet-511b5c7e",
+                    "vpcId": "vpc-6050a51b",
+                    "privateIpAddress": "172.31.80.155",
+                    "stateReason": {
+                        "code": "pending",
+                        "message": "pending"
+                    },
+                    "architecture": "x86_64",
+                    "rootDeviceType": "ebs",
+                    "rootDeviceName": "/dev/sda1",
+                    "blockDeviceMapping": {},
+                    "virtualizationType": "hvm",
+                    "hypervisor": "xen",
+                    "groupSet": {
+                        "items": [
+                            {
+                                "groupId": "sg-9112c1e7",
+                                "groupName": "launch-wizard-5"
+                            }
+                        ]
+                    },
+                    "sourceDestCheck": true,
+                    "networkInterfaceSet": {
+                        "items": [
+                            {
+                                "networkInterfaceId": "eni-8463aa4b",
+                                "subnetId": "subnet-511b5c7e",
+                                "vpcId": "vpc-6050a51b",
+                                "ownerId": "292909299215",
+                                "status": "in-use",
+                                "macAddress": "12:45:d1:cb:72:46",
+                                "privateIpAddress": "172.31.80.155",
+                                "privateDnsName": "ip-172-31-80-155.ec2.internal",
+                                "sourceDestCheck": true,
+                                "groupSet": {
+                                    "items": [
+                                        {
+                                            "groupId": "sg-9112c1e7",
+                                            "groupName": "launch-wizard-5"
+                                        }
+                                    ]
+                                },
+                                "attachment": {
+                                    "attachmentId": "eni-attach-90a3905c",
+                                    "deviceIndex": 0,
+                                    "status": "attaching",
+                                    "attachTime": 1520276502000,
+                                    "deleteOnTermination": true
+                                },
+                                "privateIpAddressesSet": {
+                                    "item": [
+                                        {
+                                            "privateIpAddress": "172.31.80.155",
+                                            "privateDnsName": "ip-172-31-80-155.ec2.internal",
+                                            "primary": true
+                                        }
+                                    ]
+                                },
+                                "ipv6AddressesSet": {},
+                                "tagSet": {}
+                            }
+                        ]
+                    },
+                    "ebsOptimized": false
+                }
+            ]
+        }
+    },
+    "requestID": "43f0d878-0d33-4620-b290-bef81c291e56",
+    "eventID": "53f752ba-e5ca-461c-ac75-5767e51a5722",
+    "eventType": "AwsApiCall",
+    "recipientAccountId": "292909299215"
+}

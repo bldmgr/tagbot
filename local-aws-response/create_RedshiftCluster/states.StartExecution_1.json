@@ -1,0 +1,26 @@
+{
+    "status_code": 200,
+    "data": {
+        "executionArn": "arn:aws:states:us-east-1:292909299215:execution:AutoTag-Redshift-SFN:Admin-CreateCluster-8a84a463-23f0-49ce-a430-14d4e7758001",
+        "startDate": {
+            "__class__": "datetime",
+            "year": 2019,
+            "month": 12,
+            "day": 24,
+            "hour": 10,
+            "minute": 40,
+            "second": 22,
+            "microsecond": 719000
+        },
+        "ResponseMetadata": {
+            "RequestId": "a8a997ff-be00-474f-8238-c13b8f6f6d12",
+            "HTTPStatusCode": 200,
+            "HTTPHeaders": {
+                "x-amzn-requestid": "a8a997ff-be00-474f-8238-c13b8f6f6d12",
+                "content-type": "application/x-amz-json-1.0",
+                "content-length": "177"
+            },
+            "RetryAttempts": 0
+        }
+    }
+}

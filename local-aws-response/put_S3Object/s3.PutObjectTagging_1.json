@@ -1,0 +1,18 @@
+{
+    "status_code": 200,
+    "data": {
+        "ResponseMetadata": {
+            "RequestId": "A17F41FE66E9E8E6",
+            "HostId": "VJngtltPOpb85nwQKvS4ljnXeqPDqoq7nk9URZSFBkcuVMHF/WYuuqUlpIa26xCUwH70yqOo7xc=",
+            "HTTPStatusCode": 200,
+            "HTTPHeaders": {
+                "x-amz-id-2": "VJngtltPOpb85nwQKvS4ljnXeqPDqoq7nk9URZSFBkcuVMHF/WYuuqUlpIa26xCUwH70yqOo7xc=",
+                "x-amz-request-id": "A17F41FE66E9E8E6",
+                "date": "Sat, 14 Dec 2019 14:16:26 GMT",
+                "content-length": "0",
+                "server": "AmazonS3"
+            },
+            "RetryAttempts": 0
+        }
+    }
+}

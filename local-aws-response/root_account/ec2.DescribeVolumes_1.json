@@ -1,0 +1,58 @@
+{
+    "status_code": 200, 
+    "data": {
+        "ResponseMetadata": {
+            "RetryAttempts": 0, 
+            "HTTPStatusCode": 200, 
+            "RequestId": "8fbb335b-0bb2-4a3c-9ef2-8b24c9452cf7", 
+            "HTTPHeaders": {
+                "transfer-encoding": "chunked", 
+                "vary": "Accept-Encoding", 
+                "server": "AmazonEC2", 
+                "content-type": "text/xml;charset=UTF-8", 
+                "date": "Mon, 05 Mar 2018 20:45:40 GMT"
+            }
+        }, 
+        "Volumes": [
+            {
+                "AvailabilityZone": "us-east-1c", 
+                "Attachments": [
+                    {
+                        "AttachTime": {
+                            "hour": 19, 
+                            "__class__": "datetime", 
+                            "month": 3, 
+                            "second": 42, 
+                            "microsecond": 0, 
+                            "year": 2018, 
+                            "day": 5, 
+                            "minute": 1
+                        }, 
+                        "InstanceId": "i-0f729d971c0b839dc", 
+                        "VolumeId": "vol-094d27017e23d1bd7", 
+                        "State": "attached", 
+                        "DeleteOnTermination": true, 
+                        "Device": "/dev/sda1"
+                    }
+                ], 
+                "Encrypted": false, 
+                "VolumeType": "gp2", 
+                "VolumeId": "vol-094d27017e23d1bd7", 
+                "State": "in-use", 
+                "Iops": 100, 
+                "SnapshotId": "snap-0a1cfc902770c514d", 
+                "CreateTime": {
+                    "hour": 19, 
+                    "__class__": "datetime", 
+                    "month": 3, 
+                    "second": 42, 
+                    "microsecond": 875000, 
+                    "year": 2018, 
+                    "day": 5, 
+                    "minute": 1
+                }, 
+                "Size": 10
+            }
+        ]
+    }
+}

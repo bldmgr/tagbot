@@ -1,0 +1,245 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: AWS auto owner tagging for Redshift
+# https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/logging-using-cloudtrail.html
+# https://docs.aws.amazon.com/redshift/latest/mgmt/db-auditing.html#rs-db-auditing-cloud-trail
+
+Resources:
+  RedshiftEventRule:
+    # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-cloudwatchevent.html
+    # https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html
+    # https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/logging-using-cloudtrail.html
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Trigger a Lambda function anytime a new Redshift cluster is created
+      EventPattern:
+        detail-type:
+          - AWS API Call via CloudTrail
+        detail:
+          eventSource:
+            - redshift.amazonaws.com
+          eventName:
+            # https://docs.aws.amazon.com/redshift/latest/APIReference/API_Operations.html
+            - CreateCluster
+      Name: New-RedshiftResource-Event
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt CFAutoTag.Arn
+          Id: AutoTagRedshiftFunction
+
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt CFAutoTag.Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt RedshiftEventRule.Arn
+
+  CFSFNAutoTag:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/redshift/redshift_sfn.zip
+      Description: This function tags Redshift resources via Step Functions.
+      FunctionName: AutoTag-Redshift-SFN
+      Handler: redshift_sfn_function.redshift_sfn_lambda_handler
+      MemorySize: 128
+      Runtime: python3.7
+      Timeout: 30
+      Role: !GetAtt LambdaAutoTagSFNRole.Arn
+
+  CFSFNAutoTagLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub
+        - /aws/lambda/${Group}
+        - { Group: !Ref CFSFNAutoTag }
+      RetentionInDays: 3
+
+  LambdaAutoTagSFNRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        # https://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-tagging.html
+        - PolicyName: LambdaAutoTagSFNRedshiftPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - redshift:CreateTags
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource:
+                  - '*'
+
+  CFAutoTag:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/redshift/redshift.zip
+      Description: This function tags Redshift resources in response to Cloudwatch Events.
+      FunctionName: AutoTag-Redshift
+      Handler: redshift_function.redshift_lambda_handler
+      MemorySize: 128
+      Runtime: python3.7
+      Timeout: 30
+      Environment:
+        Variables:
+          SFN_ARN: !Ref RedshiftStateMachine
+          SFN_MAX_RETRIES: 30 # 30 retries == 30 minutes
+      Role: !GetAtt LambdaAutoTagRole.Arn
+
+  CFAutoTagLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub
+        - /aws/lambda/${Group}
+        - { Group: !Ref CFAutoTag }
+      RetentionInDays: 3
+
+  LambdaAutoTagRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+      # https://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-tagging.html
+        - PolicyName: LambdaAutoTagRedshiftPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cloudtrail:LookupEvents
+                  - redshift:CreateTags
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource:
+                  - '*'
+        - PolicyName: LambdaRedshiftEventSFNPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - states:StartExecution
+                Resource:
+                  - '*' # define SFN here causes circular dependency
+
+  RedshiftStateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      StateMachineName: AutoTag-Redshift-SFN
+      DefinitionString:
+        !Sub
+        - |-
+          {
+            "Comment": "A state machine to manage tagging of Redshift clusters which take extended periods of time to complete creation.",
+            "StartAt": "CreateCluster?",
+            "States": {
+              "CreateCluster?": {
+                "Comment": "A Choice state adds branching logic to a state machine. Choice rules can implement 16 different comparison operators, and can be combined using And, Or, and Not",
+                "Type": "Choice",
+                "Choices": [
+                  {
+                    "Variable": "$.EventName",
+                    "StringEquals": "CreateCluster",
+                    "Next": "Yes"
+                  }
+                ],
+                "Default": "No"
+              },
+              "Yes": {
+                "Type": "Pass",
+                "Next": "Wait 60 sec"
+              },
+              "No": {
+                "Type": "Fail",
+                "Cause": "Event not handled: $.EventName"
+              },
+              "Wait 60 sec": {
+                "Comment": "A Wait state delays the state machine from continuing for a specified time.",
+                "Type": "Wait",
+                "Seconds": 60,
+                "Next": "Tag It"
+              },
+              "Tag It": {
+                "Comment": "Run the tagging Lambda.",
+                "Type": "Task",
+                "Resource": "${lambdaArn}",
+                "TimeoutSeconds": 30,
+                "Next": "IsTagged?"
+              },
+              "IsTagged?": {
+                "Comment": "Check the tag status on the input and see if it is finished.",
+                "Type": "Choice",
+                "Choices": [
+                  {
+                    "Variable": "$.TagStatus",
+                    "StringEquals": "complete",
+                    "Next": "Tagged"
+                  },
+                  {
+                    "Variable": "$.TagStatus",
+                    "StringEquals": "pending",
+                    "Next": "Wait 60 sec"
+                  },
+                  {
+                    "Variable": "$.TagStatus",
+                    "StringEquals": "max retries reached",
+                    "Next": "Max Retries Reached"
+                  }
+                ],
+                "Default": "No"
+              },
+              "Max Retries Reached": {
+                "Type": "Fail",
+                "Cause": "Max retries reached: $.Retries"
+              },
+              "Tagged": {
+                "Type": "Pass",
+                "End": true
+              }
+            }
+          }
+        - {lambdaArn: !GetAtt [ CFSFNAutoTag, Arn ]}
+      RoleArn: !GetAtt [ RedshiftStatesExecutionRole, Arn ]
+
+  RedshiftStatesExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - !Sub states.${AWS::Region}.amazonaws.com
+            Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: StatesExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "lambda:InvokeFunction"
+                Resource: !GetAtt [ CFSFNAutoTag, Arn ]

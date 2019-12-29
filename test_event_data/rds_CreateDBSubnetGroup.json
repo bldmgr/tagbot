@@ -1,0 +1,83 @@
+{
+    "eventVersion": "1.04",
+    "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAIBDRAD2OR4Z65F366",
+        "arn": "arn:aws:iam::292909299215:user/Admin",
+        "accountId": "292909299215",
+        "accessKeyId": "ASIAI3REZM423QBRHACQ",
+        "userName": "Admin",
+        "sessionContext": {
+            "attributes": {
+                "mfaAuthenticated": "false",
+                "creationDate": "2018-03-09T12:46:20Z"
+            }
+        },
+        "invokedBy": "signin.amazonaws.com"
+    },
+    "eventTime": "2018-03-09T20:21:06Z",
+    "eventSource": "rds.amazonaws.com",
+    "eventName": "CreateDBSubnetGroup",
+    "awsRegion": "us-east-1",
+    "sourceIPAddress": "206.196.17.36",
+    "userAgent": "signin.amazonaws.com",
+    "requestParameters": {
+        "subnetIds": [
+            "subnet-c401c2cb",
+            "subnet-511b5c7e",
+            "subnet-0a024135",
+            "subnet-797c481d",
+            "subnet-d6c9c59d"
+        ],
+        "dBSubnetGroupName": "demoDbSubnet",
+        "dBSubnetGroupDescription": "demoDbSubnet"
+    },
+    "responseElements": {
+        "dBSubnetGroupName": "demodbsubnet",
+        "dBSubnetGroupArn": "arn:aws:rds:us-east-1:292909299215:subgrp:demodbsubnet",
+        "dBSubnetGroupDescription": "demoDbSubnet",
+        "subnets": [
+            {
+                "subnetAvailabilityZone": {
+                    "name": "us-east-1f"
+                },
+                "subnetIdentifier": "subnet-c401c2cb",
+                "subnetStatus": "Active"
+            },
+            {
+                "subnetAvailabilityZone": {
+                    "name": "us-east-1c"
+                },
+                "subnetIdentifier": "subnet-511b5c7e",
+                "subnetStatus": "Active"
+            },
+            {
+                "subnetAvailabilityZone": {
+                    "name": "us-east-1e"
+                },
+                "subnetIdentifier": "subnet-0a024135",
+                "subnetStatus": "Active"
+            },
+            {
+                "subnetAvailabilityZone": {
+                    "name": "us-east-1b"
+                },
+                "subnetIdentifier": "subnet-797c481d",
+                "subnetStatus": "Active"
+            },
+            {
+                "subnetAvailabilityZone": {
+                    "name": "us-east-1d"
+                },
+                "subnetIdentifier": "subnet-d6c9c59d",
+                "subnetStatus": "Active"
+            }
+        ],
+        "vpcId": "vpc-6050a51b",
+        "subnetGroupStatus": "Complete"
+    },
+    "requestID": "22d7df3c-882d-4e09-a282-a529c105c093",
+    "eventID": "69de835b-6b90-4e0a-90bf-dd857394cd8a",
+    "eventType": "AwsApiCall",
+    "recipientAccountId": "292909299215"
+}

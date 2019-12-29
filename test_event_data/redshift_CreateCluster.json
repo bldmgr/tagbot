@@ -1,0 +1,84 @@
+{
+  "eventVersion": "1.05",
+  "userIdentity": {
+    "type": "IAMUser",
+    "principalId": "AIDATVPVOWKXUVYKXTXW5",
+    "arn": "arn:aws:iam::292909299215:user/Admin",
+    "accountId": "292909299215",
+    "accessKeyId": "ASIATVPVOWKXV3UL3Z77",
+    "userName": "Admin",
+    "sessionContext": {
+      "attributes": {
+        "mfaAuthenticated": "true",
+        "creationDate": "2019-12-24T12:21:27Z"
+      }
+    },
+    "invokedBy": "signin.amazonaws.com"
+  },
+  "eventTime": "2019-12-24T14:54:00Z",
+  "eventSource": "redshift.amazonaws.com",
+  "eventName": "CreateCluster",
+  "awsRegion": "us-east-1",
+  "sourceIPAddress": "206.196.17.36",
+  "userAgent": "signin.amazonaws.com",
+  "requestParameters": {
+    "clusterIdentifier": "autotag-cluster-9",
+    "enhancedVpcRouting": "False",
+    "encrypted": "False",
+    "clusterParameterGroupName": "default.redshift-1.0",
+    "masterUsername": "awsuser",
+    "masterUserPassword": "****",
+    "automatedSnapshotRetentionPeriod": 30,
+    "port": 5439,
+    "maintenanceTrackName": "current",
+    "iamRoles": [],
+    "dBName": "dev",
+    "clusterType": "single-node",
+    "nodeType": "dc2.large",
+    "publiclyAccessible": "False",
+    "preferredMaintenanceWindow": "sun:00:00-sun:00:30"
+  },
+  "responseElements": {
+    "nextMaintenanceWindowStartTime": "Dec 29, 2019 12:00:00 AM",
+    "nodeType": "dc2.large",
+    "clusterAvailabilityStatus": "Modifying",
+    "preferredMaintenanceWindow": "sun:00:00-sun:00:30",
+    "manualSnapshotRetentionPeriod": -1,
+    "clusterStatus": "creating",
+    "deferredMaintenanceWindows": [],
+    "vpcId": "vpc-6050a51b",
+    "enhancedVpcRouting": "False",
+    "masterUsername": "awsuser",
+    "clusterSecurityGroups": [],
+    "pendingModifiedValues": {
+      "masterUserPassword": "****"
+    },
+    "maintenanceTrackName": "current",
+    "dBName": "dev",
+    "clusterVersion": "1.0",
+    "encrypted": "False",
+    "publiclyAccessible": "False",
+    "tags": [],
+    "clusterParameterGroups": [
+      {
+        "parameterGroupName": "default.redshift-1.0",
+        "parameterApplyStatus": "in-sync"
+      }
+    ],
+    "allowVersionUpgrade": "True",
+    "automatedSnapshotRetentionPeriod": 30,
+    "numberOfNodes": 1,
+    "vpcSecurityGroups": [
+      {
+        "status": "active",
+        "vpcSecurityGroupId": "sg-75d44102"
+      }
+    ],
+    "iamRoles": [],
+    "clusterIdentifier": "autotag-cluster-9",
+    "clusterSubnetGroupName": "default"
+  },
+  "requestID": "376dfb2f-265d-11ea-8397-219d1980588b",
+  "eventID": "8a84a463-23f0-49ce-a430-14d4e7758001",
+  "eventType": "AwsApiCall"
+}

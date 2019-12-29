@@ -1,0 +1,59 @@
+{
+  "eventVersion": "1.05",
+  "userIdentity": {
+    "type": "IAMUser",
+    "principalId": "AIDATVPVOWKXUVYKXTXW5",
+    "arn": "arn:aws:iam::292909299215:user/Admin",
+    "accountId": "292909299215",
+    "accessKeyId": "ASIATVPVOWKX5LEXFNOL",
+    "userName": "Admin",
+    "sessionContext": {
+      "attributes": {
+        "creationDate": "2019-12-11T14:58:19Z",
+        "mfaAuthenticated": "true"}
+    },
+    "invokedBy": "signin.amazonaws.com"
+  },
+  "eventTime": "2019-12-11T17:54:20Z",
+  "eventSource": "s3.amazonaws.com",
+  "eventName": "PutObject",
+  "awsRegion": "us-east-1",
+  "sourceIPAddress": "172.110.70.106",
+  "userAgent": "signin.amazonaws.com",
+  "requestParameters": {
+    "X-Amz-Date": "20191211T175413Z",
+    "bucketName": "Admin-autotag-test",
+    "X-Amz-Algorithm": "AWS4-HMAC-SHA256",
+    "x-amz-acl": "private",
+    "X-Amz-SignedHeaders": "content-md5;host;x-amz-acl;x-amz-storage-class",
+    "Host": "Admin-autotag-test.s3.us-east-1.amazonaws.com",
+    "X-Amz-Expires": "299",
+    "key": "pipeline-6515-rollback.drawio",
+    "x-amz-storage-class": "STANDARD"
+  },
+  "responseElements": "None",
+  "additionalEventData": {
+    "SignatureVersion": "SigV4",
+    "CipherSuite": "ECDHE-RSA-AES128-GCM-SHA256",
+    "bytesTransferredIn": 8217.0,
+    "AuthenticationMethod": "QueryString",
+    "x-amz-id-2": "5ilYttrdHFw/2DCxZ/bTP3u39dQv9q9v993bKxXQ0ZsJAwJquE67HCOLqgUl3VECEFr8fBXIdSU=",
+    "bytesTransferredOut": 0.0
+  },
+  "requestID": "8E4E60A3BB8B50BD",
+  "eventID": "c1552512-f64c-4d93-a56d-d28296ba538b",
+  "readOnly": "False",
+  "resources": [
+    {
+      "type": "AWS::S3::Object",
+      "ARN": "arn:aws:s3:::Admin-autotag-test/pipeline-6515-rollback.drawio"
+    },
+    {
+      "accountId": "292909299215",
+      "type": "AWS::S3::Bucket",
+      "ARN": "arn:aws:s3:::Admin-autotag-test"
+    }
+  ],
+  "eventType": "AwsApiCall",
+  "recipientAccountId": "292909299215"
+}

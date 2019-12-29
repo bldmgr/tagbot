@@ -1,0 +1,70 @@
+{
+  "eventVersion": "1.05",
+  "userIdentity": {
+    "type": "IAMUser",
+    "principalId": "AIDATVPVOWKXUVYKXTXW5",
+    "arn": "arn:aws:iam::292909299215:user/Admin",
+    "accountId": "292909299215",
+    "accessKeyId": "ASIATVPVOWKX5XNGBSOS",
+    "userName": "Admin",
+    "sessionContext": {
+      "attributes": {
+        "mfaAuthenticated": "true",
+        "creationDate": "2019-12-27T14:04:35Z"
+      }
+    },
+    "invokedBy": "signin.amazonaws.com"
+  },
+  "eventTime": "2019-12-27T14:06:39Z",
+  "eventSource": "dax.amazonaws.com",
+  "eventName": "CreateCluster",
+  "awsRegion": "us-east-1",
+  "sourceIPAddress": "206.196.17.36",
+  "userAgent": "signin.amazonaws.com",
+  "requestParameters": {
+    "sSESpecification": {
+      "enabled": "False"
+    },
+    "subnetGroupName": "auto-tag-dax-subnet-group",
+    "description": "",
+    "clusterName": "autotag-dax-4",
+    "nodeType": "dax.t2.small",
+    "replicationFactor": 1,
+    "iamRoleArn": "arn:aws:iam::292909299215:role/service-role/DAXtoDynamoDB",
+    "securityGroupIds": [
+      "sg-07ddcbb66c5970e9d"
+    ]
+  },
+  "responseElements": {
+    "cluster": {
+      "securityGroups": [
+        {
+          "securityGroupIdentifier": "sg-07ddcbb66c5970e9d",
+          "status": "active"
+        }
+      ],
+      "parameterGroup": {
+        "nodeIdsToReboot": [],
+        "parameterGroupName": "default.dax1.0",
+        "parameterApplyStatus": "in-sync"
+      },
+      "clusterDiscoveryEndpoint": {
+        "port": 8111
+      },
+      "clusterArn": "arn:aws:dax:us-east-1:292909299215:cache/autotag-dax-4",
+      "status": "creating",
+      "subnetGroup": "auto-tag-dax-subnet-group",
+      "sSEDescription": {
+        "status": "DISABLED"
+      },
+      "iamRoleArn": "arn:aws:iam::292909299215:role/service-role/DAXtoDynamoDB",
+      "clusterName": "autotag-dax-4",
+      "activeNodes": 0,
+      "totalNodes": 1,
+      "preferredMaintenanceWindow": "sat:09:30-sat:10:30",
+      "nodeType": "dax.t2.small"
+    }
+  }, "requestID": "899ca3da-3894-4b56-a562-c896431bc430",
+  "eventID": "21f2259e-5bd2-4436-825f-fd06d241e001",
+  "eventType": "AwsApiCall"
+}

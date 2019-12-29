@@ -1,0 +1,26 @@
+{
+    "status_code": 200,
+    "data": {
+        "executionArn": "arn:aws:states:us-east-1:292909299215:execution:AutoTag-DynamoDB-SFN:Admin-CreateCluster-21f2259e-5bd2-4436-825f-fd06d241e001",
+        "startDate": {
+            "__class__": "datetime",
+            "year": 2019,
+            "month": 12,
+            "day": 27,
+            "hour": 10,
+            "minute": 18,
+            "second": 28,
+            "microsecond": 538000
+        },
+        "ResponseMetadata": {
+            "RequestId": "f58eed47-eac6-4c0e-a338-16750cdc982d",
+            "HTTPStatusCode": 200,
+            "HTTPHeaders": {
+                "x-amzn-requestid": "f58eed47-eac6-4c0e-a338-16750cdc982d",
+                "content-type": "application/x-amz-json-1.0",
+                "content-length": "177"
+            },
+            "RetryAttempts": 0
+        }
+    }
+}

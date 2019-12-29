@@ -1,0 +1,90 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS auto owner tagging for RDS
+
+Resources:
+  RDSEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: >-
+        Trigger a Lambda function anytime a new RDS resource is created
+      EventPattern:
+        detail-type:
+          - AWS API Call via CloudTrail
+        detail:
+          eventSource:
+            - rds.amazonaws.com
+          eventName:
+            - CreateDBClusterSnapshot
+            - CreateDBInstance
+            - CreateDBSnapshot
+            - CreateDBParameterGroup
+            - CreateDBSubnetGroup
+            - CreateOptionGroup
+      Name: New-RDSResource-Event
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt CFAutoTag.Arn
+          Id: AutoTagRDSFunction
+
+  CFAutoTag:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/rds/rds.zip
+      Description: This function tags RDS resource in response to Cloudwatch Events.
+      FunctionName: AutoTag-RDS
+      Handler: rds_function.rds_lambda_handler
+      MemorySize: 128
+      Runtime: python3.7
+      Timeout: 60
+      Role: !GetAtt LambdaAutoTagRole.Arn
+
+  CFAutoTagLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub
+        - /aws/lambda/${Group}
+        - { Group: !Ref CFAutoTag }
+      RetentionInDays: 3
+
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt CFAutoTag.Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt RDSEventRule.Arn
+
+  LambdaAutoTagRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+
+      Policies:
+        - PolicyName: LambdaGetLatestWindowsAmiIdPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: Stmt1458923097000
+                Effect: Allow
+                Action:
+                  - cloudtrail:LookupEvents
+                Resource:
+                  - '*'
+              - Sid: Stmt1458923121000
+                Effect: Allow
+                Action:
+                  - rds:AddTagsToResource
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource:
+                  - '*'
