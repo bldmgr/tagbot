@@ -1,0 +1,8 @@
+*.pyc
+package-deploy-template.json
+*_sam_package.yaml
+*_infra_package.yaml
+.vscode/
+venv/
+.idea
+build/

@@ -1,0 +1,19 @@
+name: Lint and Test
+on: [push]
+
+jobs:
+  lint:
+    name: Install, lint and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7'
+
+      - name: Check out
+        uses: actions/checkout@v1
+
+      - name: Install tooling, lint, and unit test
+        run: |
+          make test
