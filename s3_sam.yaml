@@ -1,0 +1,128 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS auto owner tagging for S3 buckets
+
+Parameters:
+  InfrastructureStack:
+    Description: Cross-stack reference. Name of CF stack that contains the AutoTag S3 buckets.
+    Type: String
+    MinLength: 1
+    MaxLength: 255
+    AllowedPattern: "^[a-zA-Z][-a-zA-Z0-9]*$"
+    Default: "AutoTag-Infra"
+
+Resources:
+  S3EventRule:
+    # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-cloudwatchevent.html
+    # https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Trigger a Lambda function anytime a new S3 bucket is created or an object is added.
+      EventPattern:
+        source:
+          - aws.s3
+        detail-type:
+          - AWS API Call via CloudTrail
+        detail:
+          eventSource:
+            - s3.amazonaws.com
+          # https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html#supported-notification-event-types
+          eventName:
+            - CreateBucket
+            - PutObject
+            - CopyObject
+      Name: New-S3Resource-Event
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt CFAutoTag.Arn
+          Id: AutoTag-S3Function
+
+  AutoTagS3Trail:
+    # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html
+    # https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudtrail-logging.html
+    Type: AWS::CloudTrail::Trail
+    Properties:
+      EventSelectors:
+        - DataResources:
+            - Type: "AWS::S3::Object"
+              Values:
+                - "arn:aws:s3:::"
+          IncludeManagementEvents: false
+          ReadWriteType: WriteOnly
+      IsLogging: true
+      S3BucketName:
+        Fn::ImportValue:
+          !Sub "${InfrastructureStack}-CTLogBucketName"
+      TrailName: AutoTag-S3-object-creation
+
+  CFAutoTag:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/s3/s3.zip
+      Description: This function tags S3 buckets in response to Cloudwatch Events.
+      FunctionName: AutoTag-S3
+      Handler: s3_function.s3_lambda_handler
+      MemorySize: 128
+      Runtime: python3.7
+      Timeout: 60
+      Role: !GetAtt LambdaAutoTagRole.Arn
+
+  CFAutoTagLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub
+        - /aws/lambda/${Group}
+        - { Group: !Ref CFAutoTag }
+      RetentionInDays: 3
+
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt CFAutoTag.Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt S3EventRule.Arn
+
+  PermissionForS3ToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt CFAutoTag.Arn
+      Action: lambda:InvokeFunction
+      Principal: s3.amazonaws.com
+      SourceArn: arn:aws:s3:::*
+
+  LambdaAutoTagRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaAutoTagS3Policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cloudtrail:LookupEvents
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource:
+                  - '*'
+              - Effect: Allow
+                Action:
+                  - s3:PutBucketTagging
+                Resource:
+                  - arn:aws:s3:::*
+              - Effect: Allow
+                Action:
+                  - s3:PutObjectTagging
+                Resource:
+                  - arn:aws:s3:::*/*

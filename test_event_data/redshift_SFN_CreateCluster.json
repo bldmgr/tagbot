@@ -1,0 +1,8 @@
+{
+  "EventName": "CreateCluster",
+  "Creator": "TestUser",
+  "ResourceArn": "arn:aws:redshift:us-east-1:292909299215:cluster:autotag-cluster-9",
+  "TagStatus": "pending",
+  "MaxRetries": 1,
+  "Retries": 1
+}

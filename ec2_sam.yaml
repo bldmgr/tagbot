@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS auto owner tagging for EC2
+
+Resources:
+  EC2EventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: >-
+        Trigger a Lambda function anytime a new EC2 resource is created (EC2
+        instance, EBS volume, EBS Snapshot or AMI)
+      EventPattern:
+        detail-type:
+          - AWS API Call via CloudTrail
+        detail:
+          eventSource:
+            - ec2.amazonaws.com
+          eventName:
+            - CreateVolume
+            - RunInstances
+            - StartInstances
+            - RebootInstances
+            - CreateImage
+            - CreateSnapshot
+      Name: New-EC2Resource-Event
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt CFAutoTag.Arn
+          Id: AutoTagEC2Function
+
+  CFAutoTag:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/ec2/ec2.zip
+      Description: This function tags  EC2 resource in response to Cloudwatch Events.
+      FunctionName: AutoTag-EC2
+      Handler: ec2_function.ec2_lambda_handler
+      MemorySize: 128
+      Runtime: python3.7
+      Timeout: 60
+      Role: !GetAtt LambdaAutoTagRole.Arn
+
+  CFAutoTagLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub
+        - /aws/lambda/${Group}
+        - { Group: !Ref CFAutoTag }
+      RetentionInDays: 3
+
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt CFAutoTag.Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt EC2EventRule.Arn
+
+  LambdaAutoTagRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaGetLatestWindowsAmiIdPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: Stmt1458923097000
+                Effect: Allow
+                Action:
+                  - cloudtrail:LookupEvents
+                Resource:
+                  - '*'
+              - Sid: Stmt1458923121000
+                Effect: Allow
+                Action:
+                  - ec2:CreateTags
+                  - ec2:Describe*
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource:
+                  - '*'

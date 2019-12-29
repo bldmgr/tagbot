@@ -1,0 +1,254 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS auto owner tagging for DynamoDB
+# https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/logging-using-cloudtrail.html
+
+Resources:
+  DynamoDBEventRule:
+    # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-cloudwatchevent.html
+    # https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html
+    # https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/logging-using-cloudtrail.html
+    Type: AWS::Events::Rule
+    Properties:
+      Description: Trigger a Lambda function anytime a new DynamoDB or DAX resource is created
+      EventPattern:
+        detail-type:
+          - AWS API Call via CloudTrail
+        detail:
+          eventSource:
+            - dynamodb.amazonaws.com
+            - dax.amazonaws.com
+          eventName:
+            # https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/CurrentAPI.html
+            # CreateGlobalTable - not needed, table created in other zone will log there
+            # CreateSubnetGroup, CreateParameterGroup do not support tags
+            - CreateTable
+            - CreateCluster
+      Name: New-DynamoDBResource-Event
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt CFCWAutoTag.Arn
+          Id: AutoTagDynamoDBFunction
+
+  CFCWAutoTag:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/dynamodb/dynamodb_cw.zip
+      Description: This function responds to Cloudwatch Events and calls a state machine to arrange for tagging.
+      FunctionName: AutoTag-DynamoDB-CW
+      Handler: dynamodb_cloudwatch_function.dynamodb_cloudwatch_handler
+      MemorySize: 128
+      Runtime: python3.7
+      Timeout: 30
+      Environment:
+        Variables:
+          SFN_ARN: !Ref DynamoDBStateMachine
+          SFN_MAX_ATTEMPTS: 20 # 20 retries, with 1 minute wait between each attempt
+      Role: !GetAtt CFCWAutoTagRole.Arn
+
+  CFCWAutoTagLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub
+        - /aws/lambda/${Group}
+        - { Group: !Ref CFCWAutoTag }
+      RetentionInDays: 3
+
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt CFCWAutoTag.Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt DynamoDBEventRule.Arn
+
+  CFCWAutoTagRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+
+      Policies:
+      # https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html
+        - PolicyName: CFCWAutoTagDynamoDBPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cloudtrail:LookupEvents
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource:
+                  - '*'
+        - PolicyName: CFCWAutoTagSFNPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - states:StartExecution
+                Resource:
+                  - '*' # define SFN here causes circular dependency
+
+  CFSFNAutoTag:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./build/dynamodb/dynamodb_sfn.zip
+      Description: This function responds to state machine Events and applies Creator tag to resource.
+      FunctionName: AutoTag-DynamoDB-SFN
+      Handler: dynamodb_sfn_function.dynamodb_sfn_handler
+      MemorySize: 128
+      Runtime: python3.7
+      Timeout: 30
+      Role: !GetAtt CFSFNAutoTagRole.Arn
+
+  CFSFNAutoTagLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub
+        - /aws/lambda/${Group}
+        - { Group: !Ref CFSFNAutoTag }
+      RetentionInDays: 3
+
+  CFSFNAutoTagRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+
+      Policies:
+      # https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html
+        - PolicyName: CFSFNAutoTagDynamoDBPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:TagResource
+                  - dax:TagResource
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource:
+                  - '*'
+
+  DynamoDBStateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      StateMachineName: AutoTag-DynamoDB-SFN
+      DefinitionString:
+        !Sub
+        - |-
+          {
+            "Comment": "A state machine to manage tagging of DynamoDB tables and clusters which take extended periods of time to complete creation.",
+            "StartAt": "Validate Event",
+            "States": {
+              "Validate Event": {
+                "Comment": "Determine if the creation event is supported.",
+                "Type": "Choice",
+                "Choices": [
+                  {
+                    "Variable": "$.EventName",
+                    "StringEquals": "CreateTable",
+                    "Next": "Yes"
+                  },
+                  {
+                    "Variable": "$.EventName",
+                    "StringEquals": "CreateCluster",
+                    "Next": "Yes"
+                  }
+                ],
+                "Default": "No"
+              },
+              "Yes": {
+                "Type": "Pass",
+                "Next": "Wait 60 sec"
+              },
+              "No": {
+                "Type": "Fail",
+                "Cause": "Event not handled: $.EventName"
+              },
+              "Wait 60 sec": {
+                "Comment": "A Wait state delays the state machine from continuing for a specified time.",
+                "Type": "Wait",
+                "Seconds": 60,
+                "Next": "Tag It"
+              },
+              "Tag It": {
+                "Comment": "Run the tagging Lambda.",
+                "Type": "Task",
+                "Resource": "${lambdaArn}",
+                "TimeoutSeconds": 30,
+                "Next": "IsTagged?"
+              },
+              "IsTagged?": {
+                "Comment": "Check the tag status on the input and see if it is finished.",
+                "Type": "Choice",
+                "Choices": [
+                  {
+                    "Variable": "$.TagStatus",
+                    "StringEquals": "complete",
+                    "Next": "Tagged"
+                  },
+                  {
+                    "Variable": "$.TagStatus",
+                    "StringEquals": "pending",
+                    "Next": "Wait 60 sec"
+                  },
+                  {
+                    "Variable": "$.TagStatus",
+                    "StringEquals": "max attempts reached",
+                    "Next": "Max Attempts Reached"
+                  }
+                ]
+              },
+              "Max Attempts Reached": {
+                "Type": "Fail",
+                "Cause": "Max attempts reached: $.Attempts"
+              },
+              "Tagged": {
+                "Type": "Pass",
+                "End": true
+              }
+            }
+          }
+        - {lambdaArn: !GetAtt [ CFSFNAutoTag, Arn ]}
+      RoleArn: !GetAtt [ DynamoDBStatesExecutionRole, Arn ]
+
+  DynamoDBStatesExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - !Sub states.${AWS::Region}.amazonaws.com
+            Action: "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: StatesExecutionPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "lambda:InvokeFunction"
+                Resource: !GetAtt [ CFSFNAutoTag, Arn ]

@@ -1,0 +1,43 @@
+{
+    "eventVersion": "1.04",
+    "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAIBDRAD2OR4Z65F366",
+        "arn": "arn:aws:iam::292909299215:user/Admin",
+        "accountId": "292909299215",
+        "accessKeyId": "ASIAIUAWV665QR55V32Q",
+        "userName": "Admin",
+        "sessionContext": {
+            "attributes": {
+                "mfaAuthenticated": "false",
+                "creationDate": "2018-03-09T12:46:20Z"
+            }
+        },
+        "invokedBy": "signin.amazonaws.com"
+    },
+    "eventTime": "2018-03-09T20:22:06Z",
+    "eventSource": "rds.amazonaws.com",
+    "eventName": "CreateOptionGroup",
+    "awsRegion": "us-east-1",
+    "sourceIPAddress": "174.112.214.166",
+    "userAgent": "signin.amazonaws.com",
+    "requestParameters": {
+        "optionGroupName": "demoOptionGroup",
+        "engineName": "mysql",
+        "majorEngineVersion": "5.6",
+        "optionGroupDescription": "demoOptionGroup"
+    },
+    "responseElements": {
+        "optionGroupName": "demooptiongroup",
+        "optionGroupDescription": "demoOptionGroup",
+        "engineName": "mysql",
+        "majorEngineVersion": "5.6",
+        "options": [],
+        "allowsVpcAndNonVpcInstanceMemberships": true,
+        "optionGroupArn": "arn:aws:rds:us-east-1:292909299215:og:demooptiongroup"
+    },
+    "requestID": "69b54984-96a9-415b-8b84-e6ae26d286d0",
+    "eventID": "640c0b2b-7c69-4d3b-b0e7-fda71d4c422b",
+    "eventType": "AwsApiCall",
+    "recipientAccountId": "292909299215"
+}

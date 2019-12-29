@@ -1,0 +1,63 @@
+{
+    "status_code": 200,
+    "data": {
+        "Volumes": [
+            {
+                "Attachments": [
+                    {
+                        "AttachTime": {
+                            "__class__": "datetime",
+                            "year": 2019,
+                            "month": 12,
+                            "day": 16,
+                            "hour": 15,
+                            "minute": 51,
+                            "second": 41,
+                            "microsecond": 0
+                        },
+                        "Device": "/dev/xvda",
+                        "InstanceId": "i-0d10990e156e7ca84",
+                        "State": "attached",
+                        "VolumeId": "vol-0cbe5fd9676b5eb3b",
+                        "DeleteOnTermination": true
+                    }
+                ],
+                "AvailabilityZone": "us-east-1d",
+                "CreateTime": {
+                    "__class__": "datetime",
+                    "year": 2019,
+                    "month": 12,
+                    "day": 16,
+                    "hour": 15,
+                    "minute": 51,
+                    "second": 41,
+                    "microsecond": 340000
+                },
+                "Encrypted": false,
+                "Size": 8,
+                "SnapshotId": "snap-020ec4f43b42c0023",
+                "State": "in-use",
+                "VolumeId": "vol-0cbe5fd9676b5eb3b",
+                "Iops": 100,
+                "Tags": [
+                    {
+                        "Key": "Creator",
+                        "Value": "Admin"
+                    }
+                ],
+                "VolumeType": "gp2"
+            }
+        ],
+        "ResponseMetadata": {
+            "RequestId": "a5d838c1-fad1-4e13-a00b-7f4613ac4d27",
+            "HTTPStatusCode": 200,
+            "HTTPHeaders": {
+                "content-type": "text/xml;charset=UTF-8",
+                "content-length": "1316",
+                "date": "Mon, 16 Dec 2019 18:31:01 GMT",
+                "server": "AmazonEC2"
+            },
+            "RetryAttempts": 0
+        }
+    }
+}

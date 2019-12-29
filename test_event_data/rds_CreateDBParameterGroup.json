@@ -1,0 +1,39 @@
+{
+    "eventVersion": "1.04",
+    "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAIBDRAD2OR4Z65F366",
+        "arn": "arn:aws:iam::292909299215:user/Admin",
+        "accountId": "292909299215",
+        "accessKeyId": "ASIAIJATYZI2SEB7GYKQ",
+        "userName": "Admin",
+        "sessionContext": {
+            "attributes": {
+                "mfaAuthenticated": "false",
+                "creationDate": "2018-03-09T12:46:20Z"
+            }
+        },
+        "invokedBy": "signin.amazonaws.com"
+    },
+    "eventTime": "2018-03-09T20:21:40Z",
+    "eventSource": "rds.amazonaws.com",
+    "eventName": "CreateDBParameterGroup",
+    "awsRegion": "us-east-1",
+    "sourceIPAddress": "174.112.214.166",
+    "userAgent": "signin.amazonaws.com",
+    "requestParameters": {
+        "dBParameterGroupName": "demoParameterGroup",
+        "dBParameterGroupFamily": "aurora-mysql5.7",
+        "description": "demoParameterGroup"
+    },
+    "responseElements": {
+        "dBParameterGroupName": "demoparametergroup",
+        "dBParameterGroupFamily": "aurora-mysql5.7",
+        "description": "demoParameterGroup",
+        "dBParameterGroupArn": "arn:aws:rds:us-east-1:292909299215:pg:demoparametergroup"
+    },
+    "requestID": "1f74a9e6-39d1-4616-ab37-d3007012ed72",
+    "eventID": "52275483-96b6-4f54-86a4-25a3cc73685c",
+    "eventType": "AwsApiCall",
+    "recipientAccountId": "292909299215"
+}

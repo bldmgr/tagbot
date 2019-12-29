@@ -1,0 +1,18 @@
+{
+    "status_code": 200,
+    "data": {
+        "ResponseMetadata": {
+            "RequestId": "TV0PBADJBKJA86C6B1J8SVRE0NVV4KQNSO5AEMVJF66Q9ASUAAJG",
+            "HTTPStatusCode": 200,
+            "HTTPHeaders": {
+                "server": "Server",
+                "date": "Fri, 27 Dec 2019 15:09:37 GMT",
+                "content-type": "application/x-amz-json-1.0",
+                "content-length": "0",
+                "connection": "keep-alive",
+                "x-amzn-requestid": "TV0PBADJBKJA86C6B1J8SVRE0NVV4KQNSO5AEMVJF66Q9ASUAAJG"
+            },
+            "RetryAttempts": 0
+        }
+    }
+}

@@ -1,0 +1,49 @@
+{
+  "eventVersion": "1.05",
+  "userIdentity":
+  {
+    "type": "IAMUser",
+    "principalId": "AIDATVPVOWKXUVYKXTXW5",
+    "arn": "arn:aws:iam::292909299215:user/Admin",
+    "accountId": "292909299215",
+    "accessKeyId": "ASIATVPVOWKXYOGLUC75",
+    "userName": "Admin",
+    "sessionContext":
+    {
+      "sessionIssuer": {},
+      "webIdFederationData": {},
+      "attributes":
+      {
+        "mfaAuthenticated": "true",
+        "creationDate": "2019-12-16T14:01:11Z"
+      }
+    },
+    "invokedBy": "signin.amazonaws.com"
+  },
+  "eventTime": "2019-12-16T16:58:10Z",
+  "eventSource": "ec2.amazonaws.com",
+  "eventName": "RebootInstances",
+  "awsRegion": "us-east-1",
+  "sourceIPAddress": "188.65.156.34",
+  "userAgent": "signin.amazonaws.com",
+  "requestParameters":
+  {
+    "instancesSet":
+    {
+      "items":
+      [
+        {
+          "instanceId": "i-0d10990e156e7ca84"
+        }
+      ]
+    }
+  },
+  "responseElements":
+  {
+    "requestId": "83120dda-49f6-4be3-b3be-a6983a4279bc",
+    "_return": "True"
+  },
+  "requestID": "83120dda-49f6-4be3-b3be-a6983a4279bc",
+  "eventID": "aebba4d3-a550-4e64-bc27-eed4c38a271b",
+  "eventType": "AwsApiCall"
+}

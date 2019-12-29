@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Stack for S3 buckets required in the AutoTag infrastructure. Cannot be deleted with data.
+
+Resources:
+  AutoTagCFBucket:
+    Type: AWS::S3::Bucket
+    Description: Used by CloudFormation to store artifacts for stack deployment.
+    Properties:
+      BucketName: auto-tag-cf-data
+      LifecycleConfiguration:
+        Rules:
+        - Id: DeleteContentAfterOneDay
+          Status: Enabled
+          ExpirationInDays: 1
+
+  AutoTagLogBucket:
+    Type: AWS::S3::Bucket
+    Description: Used by CloudTrail to log events that trigger S3 object tagging.
+    Properties:
+      BucketName: auto-tag-log-data
+      LifecycleConfiguration:
+        Rules:
+        - Id: DeleteContentAfterOneDay
+          Status: Enabled
+          ExpirationInDays: 1
+
+  AutoTagLogBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Description: Policy for auto-tag-log-data bucket.
+    Properties:
+      Bucket:
+        Ref: AutoTagLogBucket
+      PolicyDocument:
+        Statement:
+          -
+            Action:
+              - s3:GetBucketAcl
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                -
+                  - "arn:aws:s3:::"
+                  -
+                    Ref: AutoTagLogBucket
+            Principal:
+              Service: cloudtrail.amazonaws.com
+          -
+            Action:
+              - s3:PutObject
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                -
+                  - "arn:aws:s3:::"
+                  -
+                    Ref: AutoTagLogBucket
+                  - "/*"
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Condition:
+              StringEquals:
+                s3:x-amz-acl: bucket-owner-full-control
+
+Outputs:
+  CTLogBucketName:
+    Description: The name of the AutoTagLogBucket
+    Value:
+      Ref: AutoTagLogBucket
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-CTLogBucketName

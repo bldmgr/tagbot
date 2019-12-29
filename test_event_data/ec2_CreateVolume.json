@@ -1,0 +1,45 @@
+{
+    "eventVersion": "1.05",
+    "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAIBDRAD2OR4Z65F366",
+        "arn": "arn:aws:iam::292909299215:user/Admin",
+        "accountId": "292909299215",
+        "accessKeyId": "ASIAIEOOPEF2RXZT2SFA",
+        "userName": "Admin",
+        "sessionContext": {
+            "attributes": {
+                "mfaAuthenticated": "false",
+                "creationDate": "2018-03-08T19:38:38Z"
+            }
+        },
+        "invokedBy": "signin.amazonaws.com"
+    },
+    "eventTime": "2018-03-08T19:42:05Z",
+    "eventSource": "ec2.amazonaws.com",
+    "eventName": "CreateVolume",
+    "awsRegion": "us-east-1",
+    "sourceIPAddress": "206.196.17.36",
+    "userAgent": "signin.amazonaws.com",
+    "requestParameters": {
+        "size": "100",
+        "zone": "us-east-1a",
+        "volumeType": "gp2",
+        "encrypted": false
+    },
+    "responseElements": {
+        "requestId": "0b8a40dc-e3b0-4c80-8e09-57a48b636c29",
+        "volumeId": "vol-02f81edd0d0411bbb",
+        "size": "100",
+        "zone": "us-east-1a",
+        "status": "creating",
+        "createTime": 1520538125084,
+        "volumeType": "gp2",
+        "iops": 300,
+        "encrypted": false
+    },
+    "requestID": "0b8a40dc-e3b0-4c80-8e09-57a48b636c29",
+    "eventID": "42db9259-bf7a-408c-aa21-49042fe867a1",
+    "eventType": "AwsApiCall",
+    "recipientAccountId": "292909299215"
+}

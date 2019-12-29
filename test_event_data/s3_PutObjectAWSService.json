@@ -1,0 +1,49 @@
+{
+  "eventVersion": "1.05",
+  "userIdentity": {
+    "type": "AWSService",
+    "invokedBy": "cloudtrail.amazonaws.com"
+  },
+  "eventTime": "2019-12-14T12:19:43Z",
+  "eventSource": "s3.amazonaws.com",
+  "eventName": "PutObject",
+  "awsRegion": "us-east-1",
+  "sourceIPAddress": "cloudtrail.amazonaws.com",
+  "userAgent": "cloudtrail.amazonaws.com",
+  "requestParameters": {
+    "bucketName": "Admin-files",
+    "Host": "Admin-files.s3.amazonaws.com",
+    "x-amz-acl": "bucket-owner-full-control",
+    "x-amz-server-side-encryption": "AES256",
+    "key": "AWSLogs/292909299215/CloudTrail/us-east-1/2019/12/14/292909299215_CloudTrail_us-east-1_20191214T1215Z_s8hIj6BtFT1RmN9V.json.gz"
+  },
+  "responseElements": {
+    "x-amz-server-side-encryption": "AES256"
+  },
+  "additionalEventData": {
+    "SignatureVersion": "SigV4",
+    "CipherSuite": "ECDHE-RSA-AES128-SHA",
+    "bytesTransferredIn": 2927.0,
+    "SSEApplied": "SSE_S3",
+    "AuthenticationMethod": "AuthHeader",
+    "x-amz-id-2": "vy+w2a3VralrmL4JxkpHDO6SDsbQHlI0YLI2pkkL0BbzLFe9uCD0LgthBhIy16NkqPWic81k3+E=",
+    "bytesTransferredOut": 0.0
+  },
+  "requestID": "6F02A05759F90923",
+  "eventID": "6b57ee47-811f-49ca-8608-c1c10ba495eb",
+  "readOnly": "False",
+  "resources": [
+    {
+      "type": "AWS::S3::Object",
+      "ARN": "arn:aws:s3:::Admin-files/AWSLogs/292909299215/CloudTrail/us-east-1/2019/12/14/292909299215_CloudTrail_us-east-1_20191214T1215Z_s8hIj6BtFT1RmN9V.json.gz"
+    },
+    {
+      "accountId": "292909299215",
+      "type": "AWS::S3::Bucket",
+      "ARN": "arn:aws:s3:::Admin-files"
+    }
+  ],
+  "eventType": "AwsApiCall",
+  "recipientAccountId": "292909299215",
+  "sharedEventID": "28638a3d-a8a4-48f0-a4f7-652318dcb7f5"
+}
